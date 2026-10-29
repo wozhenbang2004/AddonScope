@@ -13,10 +13,11 @@ integration and verification; planned work stays in the roadmap.
 - Distinguish registration from later import-provenance collection so a later process exit is not attributed to the last registered add-on; avoid arbitrary module attribute hooks during provenance collection.
 - Read stored module dictionaries without executing stdlib LazyLoader code or proxy type hooks in scans and probes; preserve distinct error reasons when normalizing known trial paths.
 - Add an incident-derived `Sentinel` reproduction using pinned upstream `typing_extensions` sources, licences and checksums. This is not an original Speckle installation test.
+- Keep unreadable and missing wheel paths distinct on Python 3.13; make timeout, UTF-8 and JSON-path checks portable to Windows.
 - Add cross-platform core CI, Blender integration workflows, checked release assets and reproducible archive validation/recovery tooling.
 - Add contribution, security, case-evidence and release documentation.
 
-The integrated core passed 93 unit checks. On Linux with Blender 4.5.15 LTS, the
+The integrated core passed 96 unit checks. On Linux with Blender 4.5.15 LTS, the
 extension passed validation and install/enable/scan/uninstall; generated shared-wheel
 and settings-sensitive reproductions passed. The actual native workflow verified
 saved/live identity, history comparison, support-bundle pairing and unchanged
