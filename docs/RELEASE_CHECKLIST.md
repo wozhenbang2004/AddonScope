@@ -27,7 +27,7 @@ hosted runs are available. A passing older version is not a current result.
 
 | Platform | Core Python checks | Actual Blender runtime | Release claim |
 | --- | --- | --- | --- |
-| Linux x86_64 | Integrated 93 unit checks passed | 0.3 passed Blender 4.5.15 background integration and native workflow | Validated within documented registration scope |
+| Linux x86_64 | Integrated 96 unit checks passed | 0.3 passed Blender 4.5.15 background integration and native workflow | Validated within documented registration scope |
 | Windows | Pending hosted CI | Not yet verified | Experimental / unverified |
 | macOS | Pending hosted CI | Not yet verified | Experimental / unverified |
 | Blender 5.x | Not a substitute for runtime | Not yet verified | Not claimed |
@@ -37,7 +37,7 @@ OS, Blender build, commit/package and tested actions when upgrading a platform c
 
 ## Local evidence recorded
 
-The 0.3.0 integrated tree passed 93 core checks. The local evidence entry points
+The 0.3.0 integrated tree passed 96 core checks. The local evidence entry points
 are `artifacts/release-integration/summary.json` (archive validation,
 install/enable/scan/uninstall, shared-wheel reduction and settings snapshot) and
 `artifacts/review/native-release/checks.json` (actual native workflow, original

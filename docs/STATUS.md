@@ -10,7 +10,7 @@ are labelled historical and cannot launch tests against old paths. Tests retain
 their original settings identity, timeout and run budget. Support archives omit
 raw preference snapshots and contain one matching scan/result pair.
 
-Local release validation: 93 core tests passed; actual Blender 4.5.15 Linux
+Local release validation: 96 core tests passed; actual Blender 4.5.15 Linux
 archive validation, install/enable/scan/uninstall, shared-wheel and settings
 reproduction passed. The native GUI completed history comparison, safe return to
 the current scan, failure reduction and support export. Original test installations

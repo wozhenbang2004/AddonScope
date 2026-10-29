@@ -6,7 +6,7 @@ checks, not the availability of CI configuration.
 
 ## Core and archives
 
-`python -m unittest discover -s tests -q`: **93 tests passed** on the integrated
+`python -m unittest discover -s tests -q`: **96 tests passed** on the integrated
 source. Coverage includes static non-importing scans, Python wheel targets and
 requirements, safe archive parsing, import provenance, copied-profile execution,
 three-state outcomes, failure identity, cancellation, stored settings, history
