@@ -57,7 +57,7 @@ class ReportTests(unittest.TestCase):
         result.findings[0].title = attack
         with tempfile.TemporaryDirectory() as directory:
             path = write_html(result, Path(directory) / 'report.html')
-            html = path.read_text()
+            html = path.read_text(encoding='utf-8')
         self.assertNotIn(attack, html)
         embedded = re.search(r'<script type="application/json" id="report-data">(.*?)</script>', html, re.S).group(1)
         self.assertEqual(json.loads(embedded)['findings'][0]['title'], attack)
@@ -70,8 +70,8 @@ class ReportTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             html_path = write_html(result, Path(directory) / 'nested' / 'report.html')
             json_path = write_json(result, Path(directory) / 'nested' / 'report.json')
-            self.assertIn('No findings in this scan', html_path.read_text())
-            self.assertEqual(json.loads(json_path.read_text())['findings'], [])
+            self.assertIn('No findings in this scan', html_path.read_text(encoding='utf-8'))
+            self.assertEqual(json.loads(json_path.read_text(encoding='utf-8'))['findings'], [])
 
 
 if __name__ == '__main__':

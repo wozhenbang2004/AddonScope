@@ -3,6 +3,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from addon_scope.scanner import MAX_METADATA_BYTES, scan
 from fixtures import conflict_fixture, extension, installed, wheel
@@ -159,6 +160,44 @@ class ScannerTests(unittest.TestCase):
         result = scan([self.root])
         self.assertIn("WHEEL_PATH_UNREADABLE", self.codes(result))
         self.assertEqual([d.name for d in result.distributions], ["unrelated"])
+
+    def test_manifest_symlink_loop_with_non_strict_resolve_preserving_the_path(self):
+        addon = extension(self.root, "loop", wheels=["wheels/loop.whl"])
+        (addon / "wheels").mkdir()
+        loop = addon / "wheels" / "loop.whl"
+        loop.symlink_to("loop.whl")
+        installed(self.root / "shared", "unrelated", modules=["unrelated"])
+        resolve = Path.resolve
+
+        def resolve_preserving_loop(path, *args, **kwargs):
+            # Python 3.13 leaves a loop unresolved when strict=False; the OS
+            # still rejects stat() with ELOOP. Exercise that behavior on 3.12.
+            strict = kwargs.get("strict", args[0] if args else False)
+            if path == loop and not strict:
+                return path.absolute()
+            return resolve(path, *args, **kwargs)
+
+        with patch.object(Path, "resolve", resolve_preserving_loop):
+            result = scan([self.root])
+        self.assertIn("WHEEL_PATH_UNREADABLE", self.codes(result))
+        self.assertNotIn("WHEEL_MISSING", self.codes(result))
+        self.assertEqual([d.name for d in result.distributions], ["unrelated"])
+
+    def test_missing_declared_wheel_stays_missing(self):
+        extension(self.root, "missing", wheels=["wheels/not_here.whl"])
+        result = scan([self.root])
+        self.assertIn("WHEEL_MISSING", self.codes(result))
+        self.assertNotIn("WHEEL_PATH_UNREADABLE", self.codes(result))
+
+    def test_declared_wheel_symlink_outside_extension_is_not_opened(self):
+        addon = extension(self.root, "linked", wheels=["wheels/linked.whl"])
+        (addon / "wheels").mkdir()
+        outside = wheel(self.root / "outside", "hidden")
+        (addon / "wheels" / "linked.whl").symlink_to(outside)
+        with patch("addon_scope.scanner.zipfile.ZipFile", side_effect=AssertionError("Outside wheel must not be opened")):
+            result = scan([addon])
+        self.assertIn("UNSAFE_WHEEL_PATH", self.codes(result))
+        self.assertEqual(result.distributions, [])
 
     def test_archive_traversal_is_reported_without_extraction(self):
         addon = extension(self.root, "unsafe", wheels=["wheels/bridge-1.0-py3-none-any.whl"])

@@ -195,9 +195,14 @@ class SessionTests(unittest.TestCase):
         self.assertEqual(scan.to_dict(), before)
 
     def test_support_bundle_keeps_paths_only_when_explicitly_requested(self):
-        path = write_support_bundle(self.scan(), None, self.root / "full-paths.zip", redact_paths=False)
+        scan = self.scan()
+        path = write_support_bundle(scan, None, self.root / "full-paths.zip", redact_paths=False)
         with ZipFile(path) as archive:
-            self.assertIn(str(self.root), archive.read("scan.json").decode())
+            exported = json.loads(archive.read("scan.json"))
+            self.assertFalse(exported["paths_redacted"])
+            self.assertEqual(exported["roots"], scan.roots)
+            self.assertEqual(exported["addons"][0]["path"], scan.addons[0].path)
+            self.assertEqual(exported["loaded"], scan.loaded)
             self.assertIsNone(json.loads(archive.read("trials.json")))
 
     def test_invalid_probe_values_never_write_a_snapshot(self):

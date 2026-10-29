@@ -263,18 +263,22 @@ class ProbeTests(unittest.TestCase):
     def test_timeout_is_never_a_confirmed_failure(self):
         process = self.fake_process()
         original_wait = process.wait
+        waits = []
 
         def wait(instance, timeout=None):
+            waits.append(timeout)
             if timeout is not None:
                 raise subprocess.TimeoutExpired("blender", timeout)
             return original_wait(instance)
 
         process.wait = wait
-        with patch("addon_scope.probe.subprocess.Popen", process), patch("addon_scope.probe.os.killpg") as kill:
+        termination = (patch("addon_scope.probe.os.killpg") if os.name == "posix"
+                       else patch.object(process, "kill", create=True))
+        with patch("addon_scope.probe.subprocess.Popen", process), termination as kill:
             result = run_probe(self.spec(timeout=0.01))
         self.assertEqual(result.status, "unresolved")
-        if os.name == "posix":
-            kill.assert_called_once()
+        kill.assert_called_once()
+        self.assertEqual(waits, [0.01, None], "The timed-out process must be stopped and reaped")
 
     def test_environment_drops_user_python_and_blender_paths(self):
         with patch.dict(os.environ, {"PYTHONPATH": "/original", "PYTHONHOME": "/original", "BLENDER_USER_CONFIG": "/original",
