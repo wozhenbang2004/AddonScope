@@ -1,0 +1,17 @@
+schema_version = "1.0.0"
+id = "addon_scope"
+version = "0.3.0"
+name = "AddonScope"
+tagline = "Trace shared dependencies and reproduce add-on conflicts"
+maintainer = "AddonScope contributors"
+type = "add-on"
+tags = ["Development", "System"]
+blender_version_min = "4.5.0"
+license = ["SPDX:GPL-3.0-or-later"]
+
+[permissions]
+files = "Read add-ons, export reports and create disposable test profiles"
+
+[build]
+paths_exclude_pattern = ["__pycache__/", "*.pyc"]
+
