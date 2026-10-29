@@ -2,15 +2,28 @@
 
 import json
 from pathlib import Path
-import re
 import sys
 import traceback
 from types import ModuleType
 
 
-def _failure_key(module, error):
-    message = re.sub(r"addonscope-probe-[^/\\]+", "addonscope-probe-TEMP", str(error))
+def _failure_key(module, error, profile_root=None):
+    message = str(error)
+    if profile_root is not None:
+        root = str(profile_root)
+        variants = {root, root.replace("\\", "/"), root.replace("/", "\\"), root.replace("\\", "\\\\")}
+        for value in sorted(variants, key=len, reverse=True):
+            message = message.replace(value, "<PROFILE>")
     return json.dumps([module, type(error).__name__, message], ensure_ascii=True)
+
+
+def _module_file(module):
+    if not issubclass(type(module), ModuleType):
+        return None
+    # vars(module) still dispatches to _LazyModule.__getattribute__ and executes
+    # importlib.util.LazyLoader code. Read the base type's stored dictionary.
+    filename = ModuleType.__getattribute__(module, "__dict__").get("__file__")
+    return filename if issubclass(type(filename), str) else None
 
 
 def _seed_settings(bpy, settings):
@@ -70,7 +83,7 @@ def main():
 
         def capture_setup(error):
             errors.append("Extension dependency setup:\n" + traceback.format_exc())
-            keys.append(_failure_key("<extension-setup>", error))
+            keys.append(_failure_key("<extension-setup>", error, job_path.parent))
 
         extensions = [module for module in job["modules"] if module.startswith("bl_ext.")]
         if extensions:
@@ -83,7 +96,7 @@ def main():
             def capture(error):
                 text = "".join(traceback.format_exception(type(error), error, error.__traceback__))
                 errors.append(module + ":\n" + text)
-                keys.append(_failure_key(module, error))
+                keys.append(_failure_key(module, error, job_path.parent))
 
             count_before = len(errors)
             enabled = addon_utils.enable(module, default_set=True, handle_error=capture,
@@ -97,12 +110,8 @@ def main():
         for name, module in list(sys.modules.items()):
             if targets and not any(name == target or name.startswith(target + ".") for target in targets):
                 continue
-            # sys.modules can contain lazy proxies. Reading provenance must not
-            # call their __getattr__ hooks or import additional add-on code.
-            if not isinstance(module, ModuleType):
-                continue
-            filename = vars(module).get("__file__")
-            if isinstance(filename, str):
+            filename = _module_file(module)
+            if filename is not None:
                 loaded[name] = filename
         result = {
             "status": "fail" if errors else "pass",

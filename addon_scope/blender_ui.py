@@ -65,9 +65,9 @@ def _inputs():
     roots = list(dict.fromkeys(roots))
     loaded = {}
     for name, module in list(sys.modules.items()):
-        if isinstance(module, ModuleType):
-            path = vars(module).get("__file__")
-            if isinstance(path, str):
+        if issubclass(type(module), ModuleType):
+            path = ModuleType.__getattribute__(module, "__dict__").get("__file__")
+            if issubclass(type(path), str):
                 loaded[name] = path
     enabled = set(bpy.context.preferences.addons.keys())
     env = {
