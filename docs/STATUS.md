@@ -19,8 +19,8 @@ and settings remained unchanged. See [verification](VERIFICATION.md).
 The Sentinel case uses pinned upstream dependency sources to reproduce a known
 class of reported failure. It does not run the original Speckle connector.
 
-Hosted Actions and Windows/macOS Blender checks are pending the first repository
-runs. Future scene/actions, order experiments and ABI diagnostics are described
+Hosted Actions passed all nine Python matrix jobs and actual Linux Blender
+integration. Windows/macOS Blender runtime remains unverified. Future scene/actions, order experiments and ABI diagnostics are described
 in the [roadmap](ROADMAP.zh-CN.md). No universal compatibility, stable-release,
 community adoption or Star-growth claim is made.
 

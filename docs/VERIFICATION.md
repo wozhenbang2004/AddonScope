@@ -96,6 +96,16 @@ The current report passed actual Headless Shell checks at 1280px, 760px and
 escaping, empty results and no external requests. The seven-image native review
 HTML passed selection, zoom and 1280px/390px layout checks.
 
+## Hosted CI
+
+[Core checks run 40822935389](https://github.com/wozhenbang2004/AddonScope/actions/runs/40822935389)
+passed on code commit `060112a68ee60740255231e24f61321763469aa8`: all nine
+Python 3.11/3.12/3.13 jobs on Ubuntu 24.04, Windows 2022 and macOS 15,
+including release builds and extracted-source tests, plus actual Blender 4.5.15
+Linux integration. The first run exposed Windows-only test assumptions and
+Python 3.13 symlink-loop classification; fixes were verified by this run.
+This is not Windows/macOS Blender or GUI validation.
+
 ## Pending platform evidence
 
 Windows/macOS Blender startup and interaction, Blender 5.x, third-party complete

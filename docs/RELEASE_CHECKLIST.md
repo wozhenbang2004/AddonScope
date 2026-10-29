@@ -28,8 +28,8 @@ hosted runs are available. A passing older version is not a current result.
 | Platform | Core Python checks | Actual Blender runtime | Release claim |
 | --- | --- | --- | --- |
 | Linux x86_64 | Integrated 96 unit checks passed | 0.3 passed Blender 4.5.15 background integration and native workflow | Validated within documented registration scope |
-| Windows | Pending hosted CI | Not yet verified | Experimental / unverified |
-| macOS | Pending hosted CI | Not yet verified | Experimental / unverified |
+| Windows | Hosted Python 3.11–3.13 passed | Not yet verified | Experimental / unverified |
+| macOS | Hosted Python 3.11–3.13 passed | Not yet verified | Experimental / unverified |
 | Blender 5.x | Not a substitute for runtime | Not yet verified | Not claimed |
 
 A hosted Python matrix result is not a native Blender result. Record the precise
@@ -46,8 +46,8 @@ The pinned incident-derived case is documented in [CASES](CASES.md).
 
 Release-tag validation was independently exercised for its supported success and
 failure paths after its HTTP-error handling correction. This is a local workflow
-check; hosted GitHub Actions status is still pending. Source recovery, archive privacy/content inspection, screenshot HTML checks and
-independent sign-off passed locally. Hosted runs and publication remain pending.
+check. Hosted core and Linux Blender runs passed; see VERIFICATION.md. Source recovery, archive privacy/content inspection, screenshot HTML checks and
+independent sign-off passed locally. Publication remains pending.
 
 ## Evidence to record at sign-off
 
