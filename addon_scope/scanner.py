@@ -9,6 +9,7 @@ import csv
 import io
 import os
 import re
+import stat
 import tomllib
 import zipfile
 from collections import defaultdict
@@ -213,7 +214,18 @@ class _Scanner:
                         continue
                     if not _within(path, manifest.parent):
                         self.issue("UNSAFE_WHEEL_PATH", "error", "Wheel path escapes the extension", "A symbolic-link or relative path points outside the extension.", owners=[addon.id], evidence=[wheel])
-                    elif not path.is_file():
+                        continue
+                    try:
+                        # Non-strict resolve() can retain a symlink loop on
+                        # Python 3.13. is_file() hides that OS error as False;
+                        # stat() keeps an unreadable path distinct from missing.
+                        is_file = stat.S_ISREG(path.stat().st_mode)
+                    except (FileNotFoundError, NotADirectoryError):
+                        is_file = False
+                    except OSError as exc:
+                        self.issue("WHEEL_PATH_UNREADABLE", "warning", "A declared wheel path could not be inspected", str(exc), owners=[addon.id], evidence=[str(path)])
+                        continue
+                    if not is_file:
                         self.issue("WHEEL_MISSING", "error", "A declared wheel is missing", "Blender cannot install this dependency from the declared path.", owners=[addon.id], evidence=[str(path)])
                     elif path not in self.files:
                         self.issue("WHEEL_NOT_INSPECTED", "warning", "A declared wheel was not inventoried", "A scan limit or skipped symbolic link prevented inspection. Scan its directory explicitly.", owners=[addon.id], evidence=[str(path)])
