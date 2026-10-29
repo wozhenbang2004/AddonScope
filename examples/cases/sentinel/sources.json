@@ -1,0 +1,31 @@
+{
+  "checked_on": "2026-10-29",
+  "kind": "incident-derived minimal reproduction",
+  "incident_url": "https://speckle.community/t/blender-4-5-and-speckle-3-3-0/21042",
+  "sources": [
+    {
+      "version": "4.12.2",
+      "repository": "https://github.com/python/typing_extensions",
+      "commit": "e1250ff869e7ee5ad05170d8a4b65469f13801c3",
+      "path": "src/typing_extensions.py",
+      "git_blob_sha1": "dec429ca8723950097217d2140dd8daccb064e2d",
+      "sha256": "8307a4a721bd0d51b797158a5f89e2f2eee793759ee6c946f7c980f45dc3250c",
+      "license_file": "LICENSE",
+      "source_url": "https://github.com/python/typing_extensions/blob/e1250ff869e7ee5ad05170d8a4b65469f13801c3/src/typing_extensions.py",
+      "license_git_blob_sha1": "f26bcf4d2de6eb136e31006ca3ab447d5e488adf",
+      "license_sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+    },
+    {
+      "version": "4.14.0",
+      "repository": "https://github.com/python/typing_extensions",
+      "commit": "b07d24525615ba9377e47aaf5a26650a2517b2c4",
+      "path": "src/typing_extensions.py",
+      "git_blob_sha1": "5d5a5c7f19c7cfba72bce9704bb0f8ec1ae80a1e",
+      "sha256": "cc67bb3a7d7a4b91d597470f9689f7c22bfa334c98bdac4399f946e6dafab6fd",
+      "license_file": "LICENSE",
+      "source_url": "https://github.com/python/typing_extensions/blob/b07d24525615ba9377e47aaf5a26650a2517b2c4/src/typing_extensions.py",
+      "license_git_blob_sha1": "f26bcf4d2de6eb136e31006ca3ab447d5e488adf",
+      "license_sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+    }
+  ]
+}
