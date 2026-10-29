@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "addon-scope"
+version = "0.3.0"
+description = "Blender add-on coexistence diagnostics and reproducible registration probes"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "GPL-3.0-or-later"
+classifiers = ["Development Status :: 3 - Alpha", "Topic :: Software Development :: Debuggers"]
+
+[project.scripts]
+addon-scope = "addon_scope.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["addon_scope*"]
+
+[tool.setuptools.package-data]
+addon_scope = ["blender_manifest.toml", "LICENSE", "_vendor/packaging/LICENSE*"]
+
